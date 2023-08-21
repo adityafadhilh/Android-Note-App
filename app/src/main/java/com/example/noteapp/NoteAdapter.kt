@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
-import org.w3c.dom.Text
-import java.util.zip.Inflater
+import com.example.noteapp.database.Note
 
 class NoteAdapter(private val noteArray: ArrayList<Note>) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
