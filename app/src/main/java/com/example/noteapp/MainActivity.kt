@@ -1,15 +1,28 @@
 package com.example.noteapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp.database.Note
+import com.example.noteapp.database.NoteRepository
+import com.example.noteapp.viewmodel.MainViewModel
+import com.example.noteapp.viewmodel.ViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var rvNote: RecyclerView
     private lateinit var fab: FloatingActionButton
+
+    private val mainViewModel: MainViewModel by lazy {
+        val repository = NoteRepository(application)
+        val factory = ViewModelFactory.getInstance(repository)
+        ViewModelProvider(this, factory)[MainViewModel::class.java]
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,15 +31,30 @@ class MainActivity : AppCompatActivity() {
         fab = findViewById(R.id.fab_add)
 
         rvNote.layoutManager = LinearLayoutManager(this)
-        rvNote.adapter = NoteAdapter(noteArray)
+
+        mainViewModel.getAllNote.observe(this) {
+            setNote(it)
+        }
+
+        fab.setOnClickListener(this)
     }
 
-    private var noteArray = arrayListOf<Note>(
-        Note(1, "Test", "suahsuahshanusahsanjsnausna"),
-        Note(2, "Test", "sasasasasadsadsasasasasasasasas"),
-        Note(3, "Test", "dasasadfsdasdadadadadadadadadadad"),
-        Note(4, "Test", "dasasadfsdasdadadadadadadadadadad"),
-        Note(5, "Test", "dasasadfsdasdadadadadadadadadadad"),
-        Note(6, "Test", "dasasadfsdasdadadadadadadadadadad"),
-    )
+    private fun setNote(notes: List<Note>?) {
+        val noteArray = arrayListOf<Note>()
+        notes?.forEach {
+            noteArray.add(it)
+        }
+        rvNote.adapter = NoteAdapter(noteArray) {
+            mainViewModel.deleteNote(it)
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.fab_add -> {
+                val intent =  Intent(this, AddActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
 }
