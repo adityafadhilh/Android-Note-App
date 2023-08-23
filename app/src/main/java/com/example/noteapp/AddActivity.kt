@@ -3,12 +3,15 @@ package com.example.noteapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteapp.database.Note
 import com.example.noteapp.database.NoteRepository
 import com.example.noteapp.viewmodel.MainViewModel
 import com.example.noteapp.viewmodel.ViewModelFactory
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
 class AddActivity : AppCompatActivity() {
@@ -40,6 +43,7 @@ class AddActivity : AppCompatActivity() {
                     mainViewModel.addNote(
                         Note(title = edtTitle.text.toString(), content = edtContent.text.toString())
                     )
+                    Toast.makeText(this, "Note Added!", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }

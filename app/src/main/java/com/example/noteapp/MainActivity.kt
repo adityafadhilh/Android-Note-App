@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         rvNote.adapter = NoteAdapter(noteArray) {
             mainViewModel.deleteNote(it)
+            Toast.makeText(this, "Note Removed!", Toast.LENGTH_SHORT).show()
         }
     }
 
